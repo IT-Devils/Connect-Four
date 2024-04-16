@@ -28,6 +28,16 @@ def findDeppestCell (column):
         if (column, line)  not in matchfield:
             return line
 
+def printMatchField():
+    for i in range(CELLS):
+        if i % COLUMNS == 0:
+            print()
+        position = (i % COLUMNS, i // COLUMNS)
+        if position in matchfield:
+            print(matchfield[position],end=" ")
+        else:
+            print(".",end=" ")
+
 
 while True:
     while True:
@@ -35,5 +45,5 @@ while True:
         if ValidColumn(column):
             break
     line = findDeppestCell(column)
-    print(column, line)
     matchfield[column, line] = "O"
+    printMatchField()
