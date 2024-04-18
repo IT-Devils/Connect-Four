@@ -1,10 +1,9 @@
 matchfield = {}     # Key = (Spalte, Zeile), Value = "O" oder "X"
-
+                    # Key = (Column, Line) , Value = "O" or "X"
 COLUMNS: int = 7
 LINES: int = 6
 CELLS = COLUMNS * LINES
-
-
+DIRECTIONS = [(-1,-1),(0,-1),(1,-1),(1,0),(1,1),(0,1),(-1,1),(-1,0)]
 def get_int_input():
     while True:
         try:
@@ -38,12 +37,33 @@ def printMatchField():
         else:
             print(".",end=" ")
 
+def win(player):
+    stone = "O" if player else "X"
+    for pos in matchfield:
+        for dir in DIRECTIONS:
+            connect_four = True
+            for i in range(4):
+                column, line = pos
+                delta_column, delta_line = dir
+                p1 = (column + delta_column+i, line + delta_line*i)
+                if p1 in matchfield and matchfield[p1] == stone: continue
+                connect_four = False
+                break
+            if connect_four:
+                return True
+
+player = True
 
 while True:
+    printMatchField()
     while True:
         column = get_int_input()
         if ValidColumn(column):
             break
     line = findDeppestCell(column)
-    matchfield[column, line] = "O"
-    printMatchField()
+    matchfield[column, line] = "O" if player else "X"
+    if win(player):
+        printMatchField()
+        print("You've won!")
+        break
+    player = not player
